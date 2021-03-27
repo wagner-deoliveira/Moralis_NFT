@@ -1,0 +1,14 @@
+{
+  "name": "moralis_nft",
+  "version": "1.0.0",
+  "description": "Test NFT game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wagner Rosa",
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.0.0"
+  }
+}
