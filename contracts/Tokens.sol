@@ -1,7 +1,7 @@
 pragma solidity 0.8.0;
 
-import "../node_modules/@openzepellin/contracts/token/ERC721/ERC721.sol";
-import "../node_modules/@openzepellin/contracts/access/Ownable.sol";
+import "../node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
 contract Token is ERC721, Ownable {
   struct Pet {
@@ -18,8 +18,20 @@ contract Token is ERC721, Ownable {
   }
 
   function mint(uint8 damage, uint8 magic, uint8 endurance) public onlyOwner {
-    _safeMint(msg.sender, nextId)
+    _tokenDetails[nextId] = Pet(magic, damage, block.timestamp, endurance);
+    _safeMint(msg.sender, nextId);
     nextId++;
-    Pet(magic, damage, block.timestamp, endurance)
   }
+
+  function feed(uint256 tokenId) public {
+    Pet storage pet = _tokenDetails[nextId];
+    require(pet.lastMeal + pet.endurance > block.timestamp);
+    pet.lastMeal = block.timestamp;
+  }
+
+  function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal override {
+    Pet storage pet = _tokenDetails[nextId];
+    require(pet.lastMeal + pet.endurance > block.timestamp); // Pet is stil alive
+  }
+
 }
